@@ -1,43 +1,68 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+
+    private static void displayMessage(String message, boolean addNewLine) {
+        if (addNewLine) message += "\n";
+        System.out.print(message);
+    }
+
     public static void main(String[] args) {
 
-        Scanner s = new Scanner(System.in);
-        String command;
-        ArrayList<Task> tasks = new ArrayList<Task>();
+        Scanner scanner = new Scanner(System.in);
+        List<Task> tasks = new ArrayList<>();
+        Command command = Command.HELP;
+        String userText;
 
-        System.out.println();
         do {
-            command = s.nextLine();
+            userText = scanner.nextLine().toUpperCase();
+            try {
+                command = Command.valueOf(userText);
+            } catch (IllegalArgumentException e) {
+                displayMessage("Invalid command, allowed commands are: "
+                        + Arrays.stream(Command.values()).toList(), true);
+                continue;
+            }
             switch (command) {
-                case "add":
-                    System.out.print("Description: ");
-                    String desc = s.nextLine();
+                case ADD:
+                    displayMessage("Description: ", false);
+                    String desc = scanner.nextLine();
                     if (desc.isBlank()) {
-                        System.out.println("Description cannot be empty");
+                        displayMessage("Description cannot be empty", true);
                         break;
                     }
                     tasks.add(new Task(desc, false));
-                    System.out.println("New task added.");
+                    displayMessage("New task added.", true);
                     break;
-                case "list":
+                case DELETE:
+                    displayMessage("Delete task with number: ", false);
+                    String taskToDelete = scanner.nextLine();
+                    // TODO
+                    displayMessage("You want to delete task with number " + taskToDelete, true);
+                    break;
+                case HELP:
+                    displayMessage("Commands: " + Arrays.stream(Command.values()).toList(), true);
+                    break;
+                case LIST:
                     if (tasks.isEmpty()) {
-                        System.out.println("Task list is empty.");
+                        displayMessage("Task list is empty.", true);
                         break;
                     }
                     for (Task task : tasks) {
-                        System.out.println(task.displayTask());
+                        displayMessage(task.displayTask(), true);
                     }
                     break;
-                case "done":
-                    System.out.println("Mark given task as done");
-                    break;
-                case "delete":
-                    System.out.println("Delete given task");
+                case MARK_AS_DONE:
+                    displayMessage("Mark given task as done: ", false);
+                    String taskToMarkAsDone = scanner.nextLine();
+                    // TODO
+                    displayMessage("You want to mark task number " + taskToMarkAsDone + " as done", true);
                     break;
             }
-        } while (!command.equalsIgnoreCase("exit"));
+        } while (command != Command.EXIT);
+        scanner.close();
     }
 }
