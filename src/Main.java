@@ -31,7 +31,7 @@ public class Main {
                     displayMessage("Description: ", false);
                     String desc = scanner.nextLine();
                     if (desc.isBlank()) {
-                        displayMessage("Description cannot be empty", true);
+                        displayMessage("Description cannot be empty!", true);
                         break;
                     }
                     tasks.add(new Task(desc, false));
@@ -40,8 +40,23 @@ public class Main {
                 case DELETE:
                     displayMessage("Delete task with number: ", false);
                     String taskToDelete = scanner.nextLine();
-                    // TODO
-                    displayMessage("You want to delete task with number " + taskToDelete, true);
+                    int taskNumber = 0;
+                    boolean found = false;
+                    try {
+                        taskNumber = Integer.parseInt(taskToDelete);
+                    } catch (NumberFormatException e) {
+                        displayMessage("You didn't enter a number!", true);
+                        break;
+                    }
+                    for(Task task : tasks) {
+                        if (task.getId() == taskNumber) {
+                            found = true;
+                            tasks.remove(task);
+                            displayMessage("Task with number " + taskNumber + " was deleted.", true);
+                            break;
+                        }
+                    }
+                    if (!found) displayMessage("Task with number " + taskNumber + " does not exist!", true);
                     break;
                 case HELP:
                     displayMessage("Commands: " + Arrays.stream(Command.values()).toList(), true);
@@ -56,7 +71,7 @@ public class Main {
                     }
                     break;
                 case MARK_AS_DONE:
-                    displayMessage("Mark given task as done: ", false);
+                    displayMessage("Mark given task as done, enter task number: ", false);
                     String taskToMarkAsDone = scanner.nextLine();
                     // TODO
                     displayMessage("You want to mark task number " + taskToMarkAsDone + " as done", true);
