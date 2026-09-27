@@ -4,5 +4,5 @@ public enum Command {
     EXIT,
     HELP,
     LIST,
-    MARK_AS_DONE
+    MARK
 }

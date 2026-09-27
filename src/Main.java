@@ -10,15 +10,28 @@ public class Main {
         System.out.print(message);
     }
 
+    private static Task findGivenTask(List<Task> tasks, int taskNumber) {
+        Task taskFound = null;
+        for (Task task: tasks) {
+            if (task.getId() == taskNumber) {
+                taskFound = task;
+                break;
+            }
+        }
+        return taskFound;
+    }
+
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
         List<Task> tasks = new ArrayList<>();
-        Command command = Command.HELP;
+        Command command = null;
         String userText;
+        int taskNumber;
+        boolean found;
 
         do {
-            userText = scanner.nextLine().toUpperCase();
+            userText = scanner.nextLine().toUpperCase().trim();
             try {
                 command = Command.valueOf(userText);
             } catch (IllegalArgumentException e) {
@@ -29,7 +42,7 @@ public class Main {
             switch (command) {
                 case ADD:
                     displayMessage("Description: ", false);
-                    String desc = scanner.nextLine();
+                    String desc = scanner.nextLine().trim();
                     if (desc.isBlank()) {
                         displayMessage("Description cannot be empty!", true);
                         break;
@@ -39,22 +52,19 @@ public class Main {
                     break;
                 case DELETE:
                     displayMessage("Delete task with number: ", false);
-                    String taskToDelete = scanner.nextLine();
-                    int taskNumber = 0;
-                    boolean found = false;
+                    String taskToDelete = scanner.nextLine().trim();
                     try {
                         taskNumber = Integer.parseInt(taskToDelete);
                     } catch (NumberFormatException e) {
                         displayMessage("You didn't enter a number!", true);
                         break;
                     }
-                    for(Task task : tasks) {
-                        if (task.getId() == taskNumber) {
-                            found = true;
-                            tasks.remove(task);
-                            displayMessage("Task with number " + taskNumber + " was deleted.", true);
-                            break;
-                        }
+                    found = false;
+                    Task taskToBeDeleted = findGivenTask(tasks, taskNumber);
+                    if (taskToBeDeleted != null) {
+                        found = true;
+                        tasks.remove(taskToBeDeleted);
+                        displayMessage("Task with number " + taskNumber + " was deleted.", true);
                     }
                     if (!found) displayMessage("Task with number " + taskNumber + " does not exist!", true);
                     break;
@@ -70,11 +80,27 @@ public class Main {
                         displayMessage(task.displayTask(), true);
                     }
                     break;
-                case MARK_AS_DONE:
+                case MARK:
                     displayMessage("Mark given task as done, enter task number: ", false);
-                    String taskToMarkAsDone = scanner.nextLine();
-                    // TODO
-                    displayMessage("You want to mark task number " + taskToMarkAsDone + " as done", true);
+                    String taskToMarkAsDone = scanner.nextLine().trim();
+                    try {
+                        taskNumber = Integer.parseInt(taskToMarkAsDone);
+                    } catch (NumberFormatException e) {
+                        displayMessage("You didn't enter a number!", true);
+                        break;
+                    }
+                    found = false;
+                    Task taskToBeMarked = findGivenTask(tasks, taskNumber);
+                    if (taskToBeMarked != null) {
+                        if (taskToBeMarked.isDone()) {
+                            displayMessage("Task with number " + taskNumber + " was already marked as done!", true);
+                            break;
+                        }
+                        found = true;
+                        taskToBeMarked.setDone(true);
+                        displayMessage("Task with number " + taskNumber + " was marked as done.", true);
+                    }
+                    if (!found) displayMessage("Task with number " + taskNumber + " does not exist!", true);
                     break;
             }
         } while (command != Command.EXIT);
