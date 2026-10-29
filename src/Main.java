@@ -21,6 +21,12 @@ public class Main {
         return taskFound;
     }
 
+    private static void printAllTasks(List<Task> tasks) {
+        for (Task task: tasks) {
+            System.out.println(task.displayTask());
+        }
+    }
+
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
@@ -31,6 +37,12 @@ public class Main {
         boolean found;
 
         do {
+            System.out.println("Enter the command (type HELP for a list of allowed commands)");
+            // account for CMD+D combination
+            if (!scanner.hasNextLine()) {
+                displayMessage("Goodbye!", true);
+                System.exit(0);
+            }
             userText = scanner.nextLine().toUpperCase().trim();
             try {
                 command = Command.valueOf(userText);
@@ -41,14 +53,18 @@ public class Main {
             }
             switch (command) {
                 case ADD:
-                    displayMessage("Description: ", false);
+                    displayMessage("Description (max 45 characters): ", false);
                     String desc = scanner.nextLine().trim();
                     if (desc.isBlank()) {
                         displayMessage("Description cannot be empty!", true);
                         break;
+                    } else if(desc.length() > 45) {
+                        displayMessage("Description cannot be longer than 45 characters!", true);
+                        break;
                     }
                     tasks.add(new Task(desc, false));
                     displayMessage("New task added.", true);
+                    printAllTasks(tasks);
                     break;
                 case DELETE:
                     displayMessage("Delete task with number: ", false);
@@ -76,9 +92,7 @@ public class Main {
                         displayMessage("Task list is empty.", true);
                         break;
                     }
-                    for (Task task : tasks) {
-                        displayMessage(task.displayTask(), true);
-                    }
+                    printAllTasks(tasks);
                     break;
                 case MARK:
                     displayMessage("Mark given task as done, enter task number: ", false);

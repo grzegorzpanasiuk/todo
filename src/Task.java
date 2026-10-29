@@ -31,14 +31,12 @@ public class Task {
     }
 
     public String convertStatus() {
-        StringBuilder sb = new StringBuilder("[");
-        if (this.isDone()) sb.append("x");
-        return sb.append("]").toString();
+        if (!this.isDone()) return "[]";
+        else return "[x]";
     }
 
     public String displayTask() {
-        return "Task: " + this.getId() +
-                " | Description: " + this.getDescription() +
-                " | Status: " + this.convertStatus();
+        return String.format("Task: %03d | Description: %-45.45s | Status: %-3.3s",
+                this.getId(), this.getDescription(), this.convertStatus());
     }
 }
