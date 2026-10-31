@@ -1,3 +1,5 @@
+package todo;
+
 public enum Command {
     ADD,
     DELETE,
