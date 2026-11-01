@@ -1,4 +1,4 @@
-package todo;
+package com.grzegorzpanasiuk;
 
 import java.util.ArrayList;
 import java.util.Arrays;

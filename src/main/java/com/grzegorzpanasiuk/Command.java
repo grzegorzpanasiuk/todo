@@ -1,4 +1,4 @@
-package todo;
+package com.grzegorzpanasiuk;
 
 public enum Command {
     ADD,

@@ -7,6 +7,7 @@
 
     <properties>
         <maven.compiler.release>25</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <build>
@@ -17,7 +18,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>todo.Main</mainClass>
+                            <mainClass>com.grzegorzpanasiuk.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

@@ -1,4 +1,4 @@
-package todo;
+package com.grzegorzpanasiuk;
 
 public class Task {
     private static int nextId = 0;
