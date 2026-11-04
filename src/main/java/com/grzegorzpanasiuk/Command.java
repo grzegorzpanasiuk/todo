@@ -1,3 +1,5 @@
+package com.grzegorzpanasiuk;
+
 public enum Command {
     ADD,
     DELETE,
