@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestMethodOrder(MethodOrderer.Random.class)
 public class TaskTest {
@@ -26,5 +27,12 @@ public class TaskTest {
         String taskStatus = task.convertStatus();
 
         assertEquals("[x]", taskStatus);
+    }
+
+    @Test
+    public void cannotCreateTaskWithBlankDescription() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Task("  ", false)
+        );
     }
 }

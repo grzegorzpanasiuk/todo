@@ -7,6 +7,9 @@ public class Task {
     private boolean done;
 
     public Task(String description, boolean done) {
+        if (description.isBlank()) {
+            throw new IllegalArgumentException();
+        }
         this.id = ++nextId;
         this.description = description;
         this.done = done;
