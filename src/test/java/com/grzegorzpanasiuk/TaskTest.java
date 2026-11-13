@@ -10,22 +10,19 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TaskTest {
 
     @Test
-    public void newTaskHasEmptyStatus() {
+    public void newTaskIsNotDone() {
         Task newTask = new Task("This is description", false);
 
-        String taskStatus = newTask.convertStatus();
-
-        assertEquals("[]", taskStatus);
+        assertFalse(newTask.isDone());
     }
 
     @Test
-    public void markingTaskAsDoneChangesStatusToX() {
+    public void taskMarkedAsDoneIsDone() {
         Task task = new Task("This is another description", false);
 
         task.setDone(true);
-        String taskStatus = task.convertStatus();
 
-        assertEquals("[x]", taskStatus);
+        assertTrue(task.isDone());
     }
 
     @Test

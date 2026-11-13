@@ -7,6 +7,12 @@ import java.util.Scanner;
 
 public class Main {
 
+    private static final int DESCRIPTION_COLUMN_WIDTH = Task.MAX_DESCRIPTION_LENGTH;
+    private static final String TASK_ROW_FORMAT =
+            "Task: %03d"
+                    + " | Description: %-" + DESCRIPTION_COLUMN_WIDTH + "." + DESCRIPTION_COLUMN_WIDTH + "s"
+                    + " | Status: %-3.3s";
+
     private static void displayMessage(String message, boolean addNewLine) {
         if (addNewLine) message += "\n";
         System.out.print(message);
@@ -23,9 +29,17 @@ public class Main {
         return taskFound;
     }
 
+    private static String formatStatus(Task task) {
+        return task.isDone() ? "[x]" : "[]";
+    }
+
+    private static String formatTask(Task task) {
+        return String.format(TASK_ROW_FORMAT, task.getId(), task.getDescription(), formatStatus(task));
+    }
+
     private static void printAllTasks(List<Task> tasks) {
         for (Task task : tasks) {
-            System.out.println(task.displayTask());
+            System.out.println(formatTask(task));
         }
     }
 

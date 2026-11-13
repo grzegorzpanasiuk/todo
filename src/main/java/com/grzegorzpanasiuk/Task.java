@@ -36,16 +36,6 @@ public class Task {
         this.done = done;
     }
 
-    public String convertStatus() {
-        if (!this.isDone()) return "[]";
-        else return "[x]";
-    }
-
-    public String displayTask() {
-        return String.format("Task: %03d | Description: %-45.45s | Status: %-3.3s",
-                this.getId(), this.getDescription(), this.convertStatus());
-    }
-
     public static boolean isValidDescription(String description) {
         return !isDescriptionBlank(description) && !isDescriptionTooLong(description);
     }
