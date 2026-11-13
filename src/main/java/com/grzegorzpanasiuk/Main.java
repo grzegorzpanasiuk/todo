@@ -57,16 +57,9 @@ public class Main {
                 case ADD:
                     displayMessage("Description (max 45 characters): ", false);
                     String desc = scanner.nextLine().trim();
-                    if (desc.isBlank()) {
-                        displayMessage("Description cannot be empty!", true);
-                        break;
-                    } else if(desc.length() > 45) {
-                        displayMessage("Description cannot be longer than 45 characters!", true);
-                        break;
-                    }
-                    tasks.add(new Task(desc, false));
-                    displayMessage("New task added.", true);
-                    printAllTasks(tasks);
+
+                    addTask(tasks, desc);
+
                     break;
                 case DELETE:
                     displayMessage("Delete task with number: ", false);
@@ -121,5 +114,18 @@ public class Main {
             }
         } while (command != Command.EXIT);
         scanner.close();
+    }
+
+    private static void addTask(List<Task> tasks, String desc) {
+        if (desc.isBlank()) {
+            displayMessage("Description cannot be empty!", true);
+            return;
+        } else if (desc.length() > 45) {
+            displayMessage("Description cannot be longer than 45 characters!", true);
+            return;
+        }
+        tasks.add(new Task(desc, false));
+        displayMessage("New task added.", true);
+        printAllTasks(tasks);
     }
 }
