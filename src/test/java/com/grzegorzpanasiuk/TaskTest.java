@@ -4,8 +4,7 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.Random.class)
 public class TaskTest {
@@ -34,5 +33,15 @@ public class TaskTest {
         assertThrows(IllegalArgumentException.class, () ->
                 new Task("  ", false)
         );
+    }
+
+    @Test
+    public void blankDescriptionIsNotValid() {
+        assertFalse(Task.isValidDescription("  "));
+    }
+
+    @Test
+    public void nonBlankDescriptionIsValid() {
+        assertTrue(Task.isValidDescription("Learn Java"));
     }
 }

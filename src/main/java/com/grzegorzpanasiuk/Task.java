@@ -7,8 +7,8 @@ public class Task {
     private boolean done;
 
     public Task(String description, boolean done) {
-        if (description.isBlank()) {
-            throw new IllegalArgumentException();
+        if (!isValidDescription(description)) {
+            throw new IllegalArgumentException("Description must not be blank");
         }
         this.id = ++nextId;
         this.description = description;
@@ -43,5 +43,9 @@ public class Task {
     public String displayTask() {
         return String.format("Task: %03d | Description: %-45.45s | Status: %-3.3s",
                 this.getId(), this.getDescription(), this.convertStatus());
+    }
+
+    public static boolean isValidDescription(String description) {
+        return !description.isBlank();
     }
 }
