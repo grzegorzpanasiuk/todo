@@ -36,6 +36,13 @@ public class TaskTest {
     }
 
     @Test
+    public void cannotCreateTaskWithTooLongDescription() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Task("a".repeat(Task.MAX_DESCRIPTION_LENGTH + 1), false)
+        );
+    }
+
+    @Test
     public void blankDescriptionIsNotValid() {
         assertFalse(Task.isValidDescription("  "));
     }
@@ -43,5 +50,15 @@ public class TaskTest {
     @Test
     public void nonBlankDescriptionIsValid() {
         assertTrue(Task.isValidDescription("Learn Java"));
+    }
+
+    @Test
+    public void tooLongDescriptionIsNotValid() {
+        assertFalse(Task.isValidDescription("a".repeat(Task.MAX_DESCRIPTION_LENGTH + 1)));
+    }
+
+    @Test
+    public void descriptionWithMaxLengthIsValid() {
+        assertTrue(Task.isValidDescription("a".repeat(Task.MAX_DESCRIPTION_LENGTH)));
     }
 }

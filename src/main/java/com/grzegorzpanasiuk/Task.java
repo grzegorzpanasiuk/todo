@@ -1,6 +1,7 @@
 package com.grzegorzpanasiuk;
 
 public class Task {
+    static final int MAX_DESCRIPTION_LENGTH = 45;
     private static int nextId = 0;
     private final int id;
     private String description;
@@ -8,7 +9,7 @@ public class Task {
 
     public Task(String description, boolean done) {
         if (!isValidDescription(description)) {
-            throw new IllegalArgumentException("Description must not be blank");
+            throw new IllegalArgumentException("Invalid description: '" + description + "'");
         }
         this.id = ++nextId;
         this.description = description;
@@ -46,6 +47,14 @@ public class Task {
     }
 
     public static boolean isValidDescription(String description) {
-        return !description.isBlank();
+        return !isDescriptionBlank(description) && !isDescriptionTooLong(description);
+    }
+
+    static boolean isDescriptionBlank(String description) {
+        return description.isBlank();
+    }
+
+    static boolean isDescriptionTooLong(String description) {
+        return description.length() > MAX_DESCRIPTION_LENGTH;
     }
 }

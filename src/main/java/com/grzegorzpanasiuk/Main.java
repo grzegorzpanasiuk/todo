@@ -14,7 +14,7 @@ public class Main {
 
     private static Task findGivenTask(List<Task> tasks, int taskNumber) {
         Task taskFound = null;
-        for (Task task: tasks) {
+        for (Task task : tasks) {
             if (task.getId() == taskNumber) {
                 taskFound = task;
                 break;
@@ -24,7 +24,7 @@ public class Main {
     }
 
     private static void printAllTasks(List<Task> tasks) {
-        for (Task task: tasks) {
+        for (Task task : tasks) {
             System.out.println(task.displayTask());
         }
     }
@@ -55,7 +55,7 @@ public class Main {
             }
             switch (command) {
                 case ADD:
-                    displayMessage("Description (max 45 characters): ", false);
+                    displayMessage("Description (max " + Task.MAX_DESCRIPTION_LENGTH + " characters): ", false);
                     String description = scanner.nextLine().trim();
 
                     addTask(tasks, description);
@@ -117,12 +117,12 @@ public class Main {
     }
 
     private static void addTask(List<Task> tasks, String description) {
-        if (!Task.isValidDescription(description)) {
+        if (Task.isDescriptionBlank(description)) {
             displayMessage("Description cannot be empty!", true);
             return;
         }
-        if (description.length() > 45) {
-            displayMessage("Description cannot be longer than 45 characters!", true);
+        if (Task.isDescriptionTooLong(description)) {
+            displayMessage("Description cannot be longer than " + Task.MAX_DESCRIPTION_LENGTH + " characters!", true);
             return;
         }
         tasks.add(new Task(description, false));
