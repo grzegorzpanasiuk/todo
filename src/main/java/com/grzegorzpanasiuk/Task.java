@@ -7,13 +7,12 @@ public class Task {
     private String description;
     private boolean done;
 
-    public Task(String description, boolean done) {
+    public Task(String description) {
         if (!isValidDescription(description)) {
             throw new IllegalArgumentException("Invalid description: '" + description + "'");
         }
         this.id = ++nextId;
         this.description = description;
-        this.done = done;
     }
 
     public int getId() {

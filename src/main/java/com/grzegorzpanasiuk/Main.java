@@ -139,7 +139,7 @@ public class Main {
             displayMessage("Description cannot be longer than " + Task.MAX_DESCRIPTION_LENGTH + " characters!", true);
             return;
         }
-        tasks.add(new Task(description, false));
+        tasks.add(new Task(description));
         displayMessage("New task added.", true);
         printAllTasks(tasks);
     }

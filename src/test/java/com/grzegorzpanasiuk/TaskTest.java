@@ -11,14 +11,14 @@ public class TaskTest {
 
     @Test
     public void newTaskIsNotDone() {
-        Task newTask = new Task("This is description", false);
+        Task newTask = new Task("This is description");
 
         assertFalse(newTask.isDone());
     }
 
     @Test
     public void taskMarkedAsDoneIsDone() {
-        Task task = new Task("This is another description", false);
+        Task task = new Task("This is another description");
 
         task.setDone(true);
 
@@ -28,14 +28,14 @@ public class TaskTest {
     @Test
     public void cannotCreateTaskWithBlankDescription() {
         assertThrows(IllegalArgumentException.class, () ->
-                new Task("  ", false)
+                new Task("  ")
         );
     }
 
     @Test
     public void cannotCreateTaskWithTooLongDescription() {
         assertThrows(IllegalArgumentException.class, () ->
-                new Task("a".repeat(Task.MAX_DESCRIPTION_LENGTH + 1), false)
+                new Task("a".repeat(Task.MAX_DESCRIPTION_LENGTH + 1))
         );
     }
 
