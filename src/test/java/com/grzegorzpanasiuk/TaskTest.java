@@ -33,6 +33,13 @@ public class TaskTest {
     }
 
     @Test
+    public void cannotCreateTaskWithTooShortDescription() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Task("a".repeat(Task.MIN_DESCRIPTION_LENGTH - 1))
+        );
+    }
+
+    @Test
     public void cannotCreateTaskWithTooLongDescription() {
         assertThrows(IllegalArgumentException.class, () ->
                 new Task("a".repeat(Task.MAX_DESCRIPTION_LENGTH + 1))
@@ -57,5 +64,15 @@ public class TaskTest {
     @Test
     public void descriptionWithMaxLengthIsValid() {
         assertTrue(Task.isValidDescription("a".repeat(Task.MAX_DESCRIPTION_LENGTH)));
+    }
+
+    @Test
+    public void tooShortDescriptionIsNotValid() {
+        assertFalse(Task.isValidDescription("a".repeat(Task.MIN_DESCRIPTION_LENGTH - 1)));
+    }
+
+    @Test
+    public void descriptionWithMinLengthIsValid() {
+        assertTrue(Task.isValidDescription("a".repeat(Task.MIN_DESCRIPTION_LENGTH)));
     }
 }

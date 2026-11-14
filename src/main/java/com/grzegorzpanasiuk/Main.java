@@ -69,7 +69,8 @@ public class Main {
             }
             switch (command) {
                 case ADD:
-                    displayMessage("Description (max " + Task.MAX_DESCRIPTION_LENGTH + " characters): ", false);
+                    displayMessage("Description (" + Task.MIN_DESCRIPTION_LENGTH
+                            + "-" + Task.MAX_DESCRIPTION_LENGTH + " characters): ", false);
                     String description = scanner.nextLine().trim();
 
                     addTask(tasks, description);
@@ -135,8 +136,16 @@ public class Main {
             displayMessage("Description cannot be empty!", true);
             return;
         }
+        if (Task.isDescriptionTooShort(description)) {
+            displayMessage("Description cannot be shorter than "
+                    + Task.MIN_DESCRIPTION_LENGTH
+                    + " characters!", true);
+            return;
+        }
         if (Task.isDescriptionTooLong(description)) {
-            displayMessage("Description cannot be longer than " + Task.MAX_DESCRIPTION_LENGTH + " characters!", true);
+            displayMessage("Description cannot be longer than "
+                    + Task.MAX_DESCRIPTION_LENGTH
+                    + " characters!", true);
             return;
         }
         tasks.add(new Task(description));
