@@ -131,21 +131,30 @@ public class Main {
         scanner.close();
     }
 
-    private static void addTask(List<Task> tasks, String description) {
+    static List<String> findDescriptionErrors(String description) {
+        List<String> errors = new ArrayList<>();
         if (Task.isDescriptionBlank(description)) {
-            displayMessage("Description cannot be empty!", true);
-            return;
+            errors.add("Description cannot be empty!");
         }
         if (Task.isDescriptionTooShort(description)) {
-            displayMessage("Description cannot be shorter than "
+            errors.add("Description cannot be shorter than "
                     + Task.MIN_DESCRIPTION_LENGTH
-                    + " characters!", true);
-            return;
+                    + " characters!");
         }
         if (Task.isDescriptionTooLong(description)) {
-            displayMessage("Description cannot be longer than "
+            errors.add("Description cannot be longer than "
                     + Task.MAX_DESCRIPTION_LENGTH
-                    + " characters!", true);
+                    + " characters!");
+        }
+        return errors;
+    }
+
+    private static void addTask(List<Task> tasks, String description) {
+        List<String> errors = findDescriptionErrors(description);
+        if (!errors.isEmpty()) {
+            for (String error : errors) {
+                displayMessage(error, true);
+            }
             return;
         }
         tasks.add(new Task(description));
