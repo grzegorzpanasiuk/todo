@@ -7,6 +7,12 @@ import java.util.Scanner;
 
 public class Main {
 
+    private static final int DESCRIPTION_COLUMN_WIDTH = Task.MAX_DESCRIPTION_LENGTH;
+    private static final String TASK_ROW_FORMAT =
+            "Task: %03d"
+                    + " | Description: %-" + DESCRIPTION_COLUMN_WIDTH + "." + DESCRIPTION_COLUMN_WIDTH + "s"
+                    + " | Status: %-3.3s";
+
     private static void displayMessage(String message, boolean addNewLine) {
         if (addNewLine) message += "\n";
         System.out.print(message);
@@ -14,7 +20,7 @@ public class Main {
 
     private static Task findGivenTask(List<Task> tasks, int taskNumber) {
         Task taskFound = null;
-        for (Task task: tasks) {
+        for (Task task : tasks) {
             if (task.getId() == taskNumber) {
                 taskFound = task;
                 break;
@@ -23,9 +29,17 @@ public class Main {
         return taskFound;
     }
 
+    private static String formatStatus(Task task) {
+        return task.isDone() ? "[x]" : "[]";
+    }
+
+    private static String formatTask(Task task) {
+        return String.format(TASK_ROW_FORMAT, task.getId(), task.getDescription(), formatStatus(task));
+    }
+
     private static void printAllTasks(List<Task> tasks) {
-        for (Task task: tasks) {
-            System.out.println(task.displayTask());
+        for (Task task : tasks) {
+            System.out.println(formatTask(task));
         }
     }
 
@@ -55,18 +69,7 @@ public class Main {
             }
             switch (command) {
                 case ADD:
-                    displayMessage("Description (max 45 characters): ", false);
-                    String desc = scanner.nextLine().trim();
-                    if (desc.isBlank()) {
-                        displayMessage("Description cannot be empty!", true);
-                        break;
-                    } else if(desc.length() > 45) {
-                        displayMessage("Description cannot be longer than 45 characters!", true);
-                        break;
-                    }
-                    tasks.add(new Task(desc, false));
-                    displayMessage("New task added.", true);
-                    printAllTasks(tasks);
+                    handleAddCommand(scanner, tasks);
                     break;
                 case DELETE:
                     displayMessage("Delete task with number: ", false);
@@ -121,5 +124,40 @@ public class Main {
             }
         } while (command != Command.EXIT);
         scanner.close();
+    }
+
+    static List<String> findDescriptionErrors(String description) {
+        List<String> errors = new ArrayList<>();
+        if (Task.isDescriptionBlank(description)) {
+            errors.add("Description cannot be empty!");
+        }
+        if (Task.isDescriptionTooShort(description)) {
+            errors.add("Description cannot be shorter than "
+                    + Task.MIN_DESCRIPTION_LENGTH
+                    + " characters!");
+        }
+        if (Task.isDescriptionTooLong(description)) {
+            errors.add("Description cannot be longer than "
+                    + Task.MAX_DESCRIPTION_LENGTH
+                    + " characters!");
+        }
+        return errors;
+    }
+
+    private static void handleAddCommand(Scanner scanner, List<Task> tasks) {
+        displayMessage("Description (" + Task.MIN_DESCRIPTION_LENGTH
+                + "-" + Task.MAX_DESCRIPTION_LENGTH + " characters): ", false);
+        String description = scanner.nextLine().trim();
+
+        List<String> errors = findDescriptionErrors(description);
+        if (!errors.isEmpty()) {
+            for (String error : errors) {
+                displayMessage(error, true);
+            }
+            return;
+        }
+        tasks.add(new Task(description));
+        displayMessage("New task added.", true);
+        printAllTasks(tasks);
     }
 }

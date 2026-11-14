@@ -1,15 +1,19 @@
 package com.grzegorzpanasiuk;
 
 public class Task {
+    static final int MIN_DESCRIPTION_LENGTH = 3;
+    static final int MAX_DESCRIPTION_LENGTH = 45;
     private static int nextId = 0;
     private final int id;
     private String description;
     private boolean done;
 
-    public Task(String description, boolean done) {
+    public Task(String description) {
+        if (!isValidDescription(description)) {
+            throw new IllegalArgumentException("Invalid description: '" + description + "'");
+        }
         this.id = ++nextId;
         this.description = description;
-        this.done = done;
     }
 
     public int getId() {
@@ -32,13 +36,21 @@ public class Task {
         this.done = done;
     }
 
-    public String convertStatus() {
-        if (!this.isDone()) return "[]";
-        else return "[x]";
+    public static boolean isValidDescription(String description) {
+        return !isDescriptionBlank(description)
+                && !isDescriptionTooShort(description)
+                && !isDescriptionTooLong(description);
     }
 
-    public String displayTask() {
-        return String.format("Task: %03d | Description: %-45.45s | Status: %-3.3s",
-                this.getId(), this.getDescription(), this.convertStatus());
+    static boolean isDescriptionBlank(String description) {
+        return description.isBlank();
+    }
+
+    static boolean isDescriptionTooShort(String description) {
+        return description.length() < MIN_DESCRIPTION_LENGTH;
+    }
+
+    static boolean isDescriptionTooLong(String description) {
+        return description.length() > MAX_DESCRIPTION_LENGTH;
     }
 }
