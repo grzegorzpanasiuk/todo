@@ -69,7 +69,10 @@ public class Main {
             }
             switch (command) {
                 case ADD:
-                    handleAddCommand(scanner, tasks);
+                    displayMessage("Description (" + Task.MIN_DESCRIPTION_LENGTH
+                            + "-" + Task.MAX_DESCRIPTION_LENGTH + " characters): ", false);
+                    String description = scanner.nextLine().trim();
+                    handleAddCommand(description, tasks);
                     break;
                 case DELETE:
                     displayMessage("Delete task with number: ", false);
@@ -144,11 +147,7 @@ public class Main {
         return errors;
     }
 
-    private static void handleAddCommand(Scanner scanner, List<Task> tasks) {
-        displayMessage("Description (" + Task.MIN_DESCRIPTION_LENGTH
-                + "-" + Task.MAX_DESCRIPTION_LENGTH + " characters): ", false);
-        String description = scanner.nextLine().trim();
-
+    static void handleAddCommand(String description, List<Task> tasks) {
         List<String> errors = findDescriptionErrors(description);
         if (!errors.isEmpty()) {
             for (String error : errors) {

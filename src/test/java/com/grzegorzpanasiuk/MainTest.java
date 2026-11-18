@@ -2,6 +2,7 @@ package com.grzegorzpanasiuk;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,5 +42,16 @@ public class MainTest {
         assertEquals(List.of(
                 "Description cannot be longer than " + Task.MAX_DESCRIPTION_LENGTH + " characters!"
         ), errors);
+    }
+
+    @Test
+    public void validDescriptionIsAddedToTasks() {
+        List<Task> tasks = new ArrayList<>();
+        String description = "Learn Java";
+
+        Main.handleAddCommand(description, tasks);
+
+        assertEquals(1, tasks.size());
+        assertEquals(description, tasks.getFirst().getDescription());
     }
 }
