@@ -49,9 +49,20 @@ public class MainTest {
         List<Task> tasks = new ArrayList<>();
         String description = "Learn Java";
 
-        Main.addTaskAndReport(description, tasks);
+        List<String> errors = Main.addTask(description, tasks);
 
+        assertTrue(errors.isEmpty());
         assertEquals(1, tasks.size());
         assertEquals(description, tasks.getFirst().getDescription());
+    }
+
+    @Test
+    public void emptyDescriptionIsNotAdded() {
+        List<Task> tasks = new ArrayList<>();
+
+        List<String> errors = Main.addTask("", tasks);
+
+        assertTrue(tasks.isEmpty());
+        assertTrue(errors.contains("Description cannot be empty!"));
     }
 }

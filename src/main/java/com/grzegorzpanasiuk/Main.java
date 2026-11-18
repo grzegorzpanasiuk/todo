@@ -147,16 +147,23 @@ public class Main {
         return errors;
     }
 
-    static void addTaskAndReport(String description, List<Task> tasks) {
-        List<String> errors = findDescriptionErrors(description);
+    private static void addTaskAndReport(String description, List<Task> tasks) {
+        List<String> errors = addTask(description, tasks);
         if (!errors.isEmpty()) {
             for (String error : errors) {
                 displayMessage(error, true);
             }
             return;
         }
-        tasks.add(new Task(description));
         displayMessage("New task added.", true);
         printAllTasks(tasks);
+    }
+
+    static List<String> addTask(String description, List<Task> tasks) {
+        List<String> errors = findDescriptionErrors(description);
+        if (errors.isEmpty()) {
+            tasks.add(new Task(description));
+        }
+        return errors;
     }
 }
