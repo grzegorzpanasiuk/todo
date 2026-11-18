@@ -49,7 +49,7 @@ public class MainTest {
         List<Task> tasks = new ArrayList<>();
         String description = "Learn Java";
 
-        Main.handleAddCommand(description, tasks);
+        Main.addTaskAndReport(description, tasks);
 
         assertEquals(1, tasks.size());
         assertEquals(description, tasks.getFirst().getDescription());

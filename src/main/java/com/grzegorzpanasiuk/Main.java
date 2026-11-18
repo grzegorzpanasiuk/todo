@@ -72,7 +72,7 @@ public class Main {
                     displayMessage("Description (" + Task.MIN_DESCRIPTION_LENGTH
                             + "-" + Task.MAX_DESCRIPTION_LENGTH + " characters): ", false);
                     String description = scanner.nextLine().trim();
-                    handleAddCommand(description, tasks);
+                    addTaskAndReport(description, tasks);
                     break;
                 case DELETE:
                     displayMessage("Delete task with number: ", false);
@@ -147,7 +147,7 @@ public class Main {
         return errors;
     }
 
-    static void handleAddCommand(String description, List<Task> tasks) {
+    static void addTaskAndReport(String description, List<Task> tasks) {
         List<String> errors = findDescriptionErrors(description);
         if (!errors.isEmpty()) {
             for (String error : errors) {
