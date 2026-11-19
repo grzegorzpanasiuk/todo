@@ -37,4 +37,35 @@ public class TaskListTest {
 
         assertThrows(UnsupportedOperationException.class, () -> tasks.add(new Task("Learn Java")));
     }
+
+    @Test
+    public void deletedTaskIsNotReturnedByFindAll() {
+        TaskList taskList = new TaskList();
+        taskList.add("Task 1");
+        int id = taskList.findAll().getFirst().getId();
+
+        taskList.deleteById(id);
+
+        assertTrue(taskList.findAll().isEmpty());
+    }
+
+    @Test
+    public void deletingExistingTaskReturnsTrue() {
+        TaskList taskList = new TaskList();
+        taskList.add("Task 2");
+        int id = taskList.findAll().getFirst().getId();
+
+        boolean deleted = taskList.deleteById(id);
+
+        assertTrue(deleted);
+    }
+
+    @Test
+    public void deletingNonExistentTaskReturnsFalse() {
+        TaskList taskList = new TaskList();
+
+        boolean deleted = taskList.deleteById(1);
+
+        assertFalse(deleted);
+    }
 }

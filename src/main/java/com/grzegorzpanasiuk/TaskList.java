@@ -14,4 +14,8 @@ public class TaskList {
     public void add(String description) {
         tasks.add(new Task(description));
     }
+
+    public boolean deleteById(int id) {
+        return tasks.removeIf(task -> task.getId() == id);
+    }
 }
