@@ -2,7 +2,6 @@ package com.grzegorzpanasiuk;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,23 +45,23 @@ public class MainTest {
 
     @Test
     public void validDescriptionIsAddedToTasks() {
-        List<Task> tasks = new ArrayList<>();
+        TaskList taskList = new TaskList();
         String description = "Learn Java";
 
-        List<String> errors = Main.addTask(description, tasks);
+        List<String> errors = Main.addTask(description, taskList);
 
         assertTrue(errors.isEmpty());
-        assertEquals(1, tasks.size());
-        assertEquals(description, tasks.getFirst().getDescription());
+        assertEquals(1, taskList.findAll().size());
+        assertEquals(description, taskList.findAll().getFirst().getDescription());
     }
 
     @Test
     public void emptyDescriptionIsNotAdded() {
-        List<Task> tasks = new ArrayList<>();
+        TaskList taskList = new TaskList();
 
-        List<String> errors = Main.addTask("", tasks);
+        List<String> errors = Main.addTask("", taskList);
 
-        assertTrue(tasks.isEmpty());
+        assertTrue(taskList.findAll().isEmpty());
         assertTrue(errors.contains("Description cannot be empty!"));
     }
 }
