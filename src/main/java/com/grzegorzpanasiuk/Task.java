@@ -35,6 +35,14 @@ public class Task {
         this.done = done;
     }
 
+    public boolean markAsDone() {
+        if (isDone()) {
+            return false;
+        }
+        this.done = true;
+        return true;
+    }
+
     public static boolean isValidDescription(String description) {
         return !isDescriptionBlank(description)
                 && !isDescriptionTooShort(description)
