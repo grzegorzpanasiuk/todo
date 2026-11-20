@@ -14,25 +14,6 @@ public class Main {
                     + " | Description: %-" + DESCRIPTION_COLUMN_WIDTH + "." + DESCRIPTION_COLUMN_WIDTH + "s"
                     + " | Status: %-3.3s";
 
-    private static void displayMessage(String message, boolean addNewLine) {
-        if (addNewLine) message += "\n";
-        System.out.print(message);
-    }
-
-    private static String formatStatus(Task task) {
-        return task.isDone() ? "[x]" : "[]";
-    }
-
-    private static String formatTask(Task task) {
-        return String.format(TASK_ROW_FORMAT, task.getId(), task.getDescription(), formatStatus(task));
-    }
-
-    private static void printAllTasks(List<Task> tasks) {
-        for (Task task : tasks) {
-            System.out.println(formatTask(task));
-        }
-    }
-
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
@@ -113,22 +94,25 @@ public class Main {
         scanner.close();
     }
 
-    static List<String> findDescriptionErrors(String description) {
-        List<String> errors = new ArrayList<>();
-        if (Task.isDescriptionBlank(description)) {
-            errors.add("Description cannot be empty!");
+    private static String readTrimmedLineOrExit(Scanner scanner) {
+        Optional<String> line = readTrimmedLine(scanner);
+        if (line.isEmpty()) {
+            displayMessage("Goodbye!", true);
+            System.exit(0);
         }
-        if (Task.isDescriptionTooShort(description)) {
-            errors.add("Description cannot be shorter than "
-                    + Task.MIN_DESCRIPTION_LENGTH
-                    + " characters!");
+        return line.orElseThrow();
+    }
+
+    static Optional<String> readTrimmedLine(Scanner scanner) {
+        if (!scanner.hasNextLine()) {
+            return Optional.empty();
         }
-        if (Task.isDescriptionTooLong(description)) {
-            errors.add("Description cannot be longer than "
-                    + Task.MAX_DESCRIPTION_LENGTH
-                    + " characters!");
-        }
-        return errors;
+        return Optional.of(scanner.nextLine().trim());
+    }
+
+    private static void displayMessage(String message, boolean addNewLine) {
+        if (addNewLine) message += "\n";
+        System.out.print(message);
     }
 
     private static void addTaskAndReport(String description, TaskList taskList) {
@@ -151,19 +135,35 @@ public class Main {
         return errors;
     }
 
-    static Optional<String> readTrimmedLine(Scanner scanner) {
-        if (!scanner.hasNextLine()) {
-            return Optional.empty();
+    static List<String> findDescriptionErrors(String description) {
+        List<String> errors = new ArrayList<>();
+        if (Task.isDescriptionBlank(description)) {
+            errors.add("Description cannot be empty!");
         }
-        return Optional.of(scanner.nextLine().trim());
+        if (Task.isDescriptionTooShort(description)) {
+            errors.add("Description cannot be shorter than "
+                    + Task.MIN_DESCRIPTION_LENGTH
+                    + " characters!");
+        }
+        if (Task.isDescriptionTooLong(description)) {
+            errors.add("Description cannot be longer than "
+                    + Task.MAX_DESCRIPTION_LENGTH
+                    + " characters!");
+        }
+        return errors;
     }
 
-    private static String readTrimmedLineOrExit(Scanner scanner) {
-        Optional<String> line = readTrimmedLine(scanner);
-        if (line.isEmpty()) {
-            displayMessage("Goodbye!", true);
-            System.exit(0);
+    private static void printAllTasks(List<Task> tasks) {
+        for (Task task : tasks) {
+            System.out.println(formatTask(task));
         }
-        return line.orElseThrow();
+    }
+
+    private static String formatTask(Task task) {
+        return String.format(TASK_ROW_FORMAT, task.getId(), task.getDescription(), formatStatus(task));
+    }
+
+    private static String formatStatus(Task task) {
+        return task.isDone() ? "[x]" : "[]";
     }
 }
