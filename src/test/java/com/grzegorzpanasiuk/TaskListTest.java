@@ -36,7 +36,7 @@ public class TaskListTest {
 
         List<Task> tasks = taskList.findAll();
 
-        assertThrows(UnsupportedOperationException.class, () -> tasks.add(new Task("Learn Java")));
+        assertThrows(UnsupportedOperationException.class, () -> tasks.clear());
     }
 
     @Test
@@ -92,5 +92,16 @@ public class TaskListTest {
         Optional<Task> found = taskList.findById(missingId);
 
         assertTrue(found.isEmpty());
+    }
+
+    @Test
+    public void eachTaskListNumbersTasksFromOne() {
+        TaskList firstList = new TaskList();
+        firstList.add("Task 1");
+        TaskList secondList = new TaskList();
+
+        secondList.add("Task 2");
+
+        assertEquals(1, secondList.findAll().getFirst().getId());
     }
 }
