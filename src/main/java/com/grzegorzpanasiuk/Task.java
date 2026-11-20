@@ -31,10 +31,6 @@ public class Task {
         return done;
     }
 
-    public void setDone(boolean done) {
-        this.done = done;
-    }
-
     public boolean markAsDone() {
         if (isDone()) {
             return false;

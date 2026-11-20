@@ -105,11 +105,12 @@ public class Main {
                         break;
                     }
                     Task taskToBeMarked = found.orElseThrow();
-                    if (taskToBeMarked.isDone()) {
-                        displayMessage("Task with number " + taskNumber + " was already marked as done!", true);
-                    } else {
-                        taskToBeMarked.setDone(true);
+
+                    boolean marked = taskToBeMarked.markAsDone();
+                    if (marked) {
                         displayMessage("Task with number " + taskNumber + " was marked as done.", true);
+                    } else {
+                        displayMessage("Task with number " + taskNumber + " was already marked as done!", true);
                     }
                     break;
             }
