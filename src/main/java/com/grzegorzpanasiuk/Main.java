@@ -43,12 +43,7 @@ public class Main {
 
         do {
             System.out.println("Enter the command (type HELP for a list of allowed commands)");
-            // account for CMD+D combination
-            if (!scanner.hasNextLine()) {
-                displayMessage("Goodbye!", true);
-                System.exit(0);
-            }
-            userText = scanner.nextLine().toUpperCase().trim();
+            userText = readTrimmedLineOrExit(scanner).toUpperCase();
             try {
                 command = Command.valueOf(userText);
             } catch (IllegalArgumentException e) {
@@ -60,12 +55,12 @@ public class Main {
                 case ADD:
                     displayMessage("Description (" + Task.MIN_DESCRIPTION_LENGTH
                             + "-" + Task.MAX_DESCRIPTION_LENGTH + " characters): ", false);
-                    String description = scanner.nextLine().trim();
+                    String description = readTrimmedLineOrExit(scanner);
                     addTaskAndReport(description, taskList);
                     break;
                 case DELETE:
                     displayMessage("Delete task with number: ", false);
-                    String taskToDelete = scanner.nextLine().trim();
+                    String taskToDelete = readTrimmedLineOrExit(scanner);
                     try {
                         taskNumber = Integer.parseInt(taskToDelete);
                     } catch (NumberFormatException e) {
@@ -91,7 +86,7 @@ public class Main {
                     break;
                 case MARK:
                     displayMessage("Mark given task as done, enter task number: ", false);
-                    String taskToMarkAsDone = scanner.nextLine().trim();
+                    String taskToMarkAsDone = readTrimmedLineOrExit(scanner);
                     try {
                         taskNumber = Integer.parseInt(taskToMarkAsDone);
                     } catch (NumberFormatException e) {
@@ -154,5 +149,21 @@ public class Main {
             taskList.add(description);
         }
         return errors;
+    }
+
+    static Optional<String> readTrimmedLine(Scanner scanner) {
+        if (!scanner.hasNextLine()) {
+            return Optional.empty();
+        }
+        return Optional.of(scanner.nextLine().trim());
+    }
+
+    private static String readTrimmedLineOrExit(Scanner scanner) {
+        Optional<String> line = readTrimmedLine(scanner);
+        if (line.isEmpty()) {
+            displayMessage("Goodbye!", true);
+            System.exit(0);
+        }
+        return line.orElseThrow();
     }
 }
