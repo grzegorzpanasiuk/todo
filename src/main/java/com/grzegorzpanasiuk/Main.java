@@ -3,6 +3,7 @@ package com.grzegorzpanasiuk;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Main {
@@ -16,17 +17,6 @@ public class Main {
     private static void displayMessage(String message, boolean addNewLine) {
         if (addNewLine) message += "\n";
         System.out.print(message);
-    }
-
-    private static Task findGivenTask(List<Task> tasks, int taskNumber) {
-        Task taskFound = null;
-        for (Task task : tasks) {
-            if (task.getId() == taskNumber) {
-                taskFound = task;
-                break;
-            }
-        }
-        return taskFound;
     }
 
     private static String formatStatus(Task task) {
@@ -50,7 +40,6 @@ public class Main {
         Command command = null;
         String userText;
         int taskNumber;
-        boolean found;
 
         do {
             System.out.println("Enter the command (type HELP for a list of allowed commands)");
@@ -109,18 +98,19 @@ public class Main {
                         displayMessage("You didn't enter a number!", true);
                         break;
                     }
-                    found = false;
-                    Task taskToBeMarked = findGivenTask(taskList.findAll(), taskNumber);
-                    if (taskToBeMarked != null) {
-                        if (taskToBeMarked.isDone()) {
-                            displayMessage("Task with number " + taskNumber + " was already marked as done!", true);
-                            break;
-                        }
-                        found = true;
+
+                    Optional<Task> found = taskList.findById(taskNumber);
+                    if (found.isEmpty()) {
+                        displayMessage("Task with number " + taskNumber + " does not exist!", true);
+                        break;
+                    }
+                    Task taskToBeMarked = found.orElseThrow();
+                    if (taskToBeMarked.isDone()) {
+                        displayMessage("Task with number " + taskNumber + " was already marked as done!", true);
+                    } else {
                         taskToBeMarked.setDone(true);
                         displayMessage("Task with number " + taskNumber + " was marked as done.", true);
                     }
-                    if (!found) displayMessage("Task with number " + taskNumber + " does not exist!", true);
                     break;
             }
         } while (command != Command.EXIT);
