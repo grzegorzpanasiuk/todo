@@ -15,6 +15,16 @@ public class TaskList {
         tasks.add(new Task(description));
     }
 
+    /**
+     * Removes the task with the given id.
+     * <p>
+     * This repository holds no business rules, so {@code false} means only that
+     * no task with this id exists. Rules that may forbid deleting a task must be
+     * checked by the caller before calling this method.
+     *
+     * @param id the id of the task to remove
+     * @return {@code true} if a task was removed, {@code false} if no task has this id
+     */
     public boolean deleteById(int id) {
         return tasks.removeIf(task -> task.getId() == id);
     }
