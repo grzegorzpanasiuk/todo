@@ -82,8 +82,7 @@ public class TaskListTest {
         TaskList taskList = TaskList.empty();
         String secondDescription = "Task 2";
         taskList.add("Task 1");
-        taskList.add(secondDescription);
-        int secondId = taskList.findAll().get(1).getId();
+        int secondId = taskList.add(secondDescription);
 
         Optional<Task> found = taskList.findById(secondId);
 
@@ -93,8 +92,8 @@ public class TaskListTest {
     @Test
     public void findByIdReturnsEmptyWhenTaskDoesNotExist() {
         TaskList taskList = TaskList.empty();
-        taskList.add("Task 1");
-        int missingId = taskList.findAll().getFirst().getId() + 1;
+        int existingId = taskList.add("Task 1");
+        int missingId = existingId + 1;
 
         Optional<Task> found = taskList.findById(missingId);
 
