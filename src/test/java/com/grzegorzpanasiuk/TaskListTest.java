@@ -30,6 +30,15 @@ public class TaskListTest {
     }
 
     @Test
+    public void addReturnsIdOfAddedTask() {
+        TaskList taskList = new TaskList();
+
+        int id = taskList.add("Learn TDD");
+
+        assertEquals(taskList.findAll().getFirst().getId(), id);
+    }
+
+    @Test
     public void tasksReturnedByFindAllCannotBeModified() {
         TaskList taskList = new TaskList();
 
@@ -41,8 +50,7 @@ public class TaskListTest {
     @Test
     public void deletedTaskIsNotReturnedByFindAll() {
         TaskList taskList = new TaskList();
-        taskList.add("Task 1");
-        int id = taskList.findAll().getFirst().getId();
+        int id = taskList.add("Task 1");
 
         taskList.deleteById(id);
 
@@ -52,8 +60,7 @@ public class TaskListTest {
     @Test
     public void deletingExistingTaskReturnsTrue() {
         TaskList taskList = new TaskList();
-        taskList.add("Task 2");
-        int id = taskList.findAll().getFirst().getId();
+        int id = taskList.add("Task 2");
 
         boolean deleted = taskList.deleteById(id);
 

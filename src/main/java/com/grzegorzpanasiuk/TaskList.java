@@ -11,8 +11,10 @@ public class TaskList {
         return Collections.unmodifiableList(tasks);
     }
 
-    public void add(String description) {
-        tasks.add(new Task(description));
+    public int add(String description) {
+        Task newTask = new Task(description);
+        tasks.add(newTask);
+        return newTask.getId();
     }
 
     /**
