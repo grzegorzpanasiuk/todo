@@ -39,7 +39,6 @@ public class Main {
         TaskList taskList = TaskList.empty();
         Command command = null;
         String userText;
-        int taskNumber;
 
         do {
             System.out.println("Enter the command (type HELP for a list of allowed commands)");
@@ -66,17 +65,18 @@ public class Main {
                 case DELETE:
                     displayMessage("Delete task with number: ", false);
                     String taskToDelete = scanner.nextLine().trim();
+                    int taskNumberToBeDeleted;
                     try {
-                        taskNumber = Integer.parseInt(taskToDelete);
+                        taskNumberToBeDeleted = Integer.parseInt(taskToDelete);
                     } catch (NumberFormatException e) {
                         displayMessage("You didn't enter a number!", true);
                         break;
                     }
-                    boolean deleted = taskList.deleteById(taskNumber);
+                    boolean deleted = taskList.deleteById(taskNumberToBeDeleted);
                     if (deleted) {
-                        displayMessage("Task with number " + taskNumber + " was deleted.", true);
+                        displayMessage("Task with number " + taskNumberToBeDeleted + " was deleted.", true);
                     } else {
-                        displayMessage("Task with number " + taskNumber + " does not exist!", true);
+                        displayMessage("Task with number " + taskNumberToBeDeleted + " does not exist!", true);
                     }
                     break;
                 case HELP:
@@ -93,25 +93,26 @@ public class Main {
                 case MARK:
                     displayMessage("Mark given task as done, enter task number: ", false);
                     String taskToMarkAsDone = scanner.nextLine().trim();
+                    int taskNumberToBeMarked;
                     try {
-                        taskNumber = Integer.parseInt(taskToMarkAsDone);
+                        taskNumberToBeMarked = Integer.parseInt(taskToMarkAsDone);
                     } catch (NumberFormatException e) {
                         displayMessage("You didn't enter a number!", true);
                         break;
                     }
 
-                    Optional<Task> found = taskList.findById(taskNumber);
-                    if (found.isEmpty()) {
-                        displayMessage("Task with number " + taskNumber + " does not exist!", true);
-                        break;
-                    }
-                    Task taskToBeMarked = found.orElseThrow();
-                    if (taskToBeMarked.isDone()) {
-                        displayMessage("Task with number " + taskNumber + " was already marked as done!", true);
-                    } else {
-                        taskToBeMarked.setDone(true);
-                        displayMessage("Task with number " + taskNumber + " was marked as done.", true);
-                    }
+                    Optional<Task> found = taskList.findById(taskNumberToBeMarked);
+                    found.ifPresentOrElse(
+                            task -> {
+                                if (task.isDone()) {
+                                    displayMessage("Task with number " + task.getId() + " was already marked as done!", true);
+                                } else {
+                                    task.setDone(true);
+                                    displayMessage("Task with number " + task.getId() + " was marked as done.", true);
+                                }
+                            },
+                            () -> displayMessage("Task with number " + taskNumberToBeMarked + " does not exist!", true)
+                    );
                     break;
             }
         } while (command != Command.EXIT);
