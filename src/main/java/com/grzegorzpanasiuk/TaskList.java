@@ -3,9 +3,11 @@ package com.grzegorzpanasiuk;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class TaskList {
     private final List<Task> tasks = new ArrayList<>();
+    private int nextId = 1;
 
     private TaskList() {
     }
@@ -19,8 +21,9 @@ public class TaskList {
     }
 
     public int add(String description) {
-        Task newTask = new Task(description);
+        Task newTask = new Task(nextId, description);
         tasks.add(newTask);
+        nextId++;
         return newTask.getId();
     }
 
@@ -36,5 +39,12 @@ public class TaskList {
      */
     public boolean deleteById(int id) {
         return tasks.removeIf(task -> task.getId() == id);
+    }
+
+    public Optional<Task> findById(int id) {
+        return tasks
+                .stream()
+                .filter(task -> task.getId() == id)
+                .findFirst();
     }
 }

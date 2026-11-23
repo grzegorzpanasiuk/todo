@@ -3,16 +3,15 @@ package com.grzegorzpanasiuk;
 public class Task {
     static final int MIN_DESCRIPTION_LENGTH = 3;
     static final int MAX_DESCRIPTION_LENGTH = 45;
-    private static int nextId = 0;
     private final int id;
     private String description;
     private boolean done;
 
-    public Task(String description) {
+    public Task(int id, String description) {
         if (!isValidDescription(description)) {
             throw new IllegalArgumentException("Invalid description: '" + description + "'");
         }
-        this.id = ++nextId;
+        this.id = id;
         this.description = description;
     }
 

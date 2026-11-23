@@ -3,6 +3,7 @@ package com.grzegorzpanasiuk;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -41,10 +42,11 @@ public class TaskListTest {
     @Test
     public void tasksReturnedByFindAllCannotBeModified() {
         TaskList taskList = TaskList.empty();
+        taskList.add("Task 1");
 
         List<Task> tasks = taskList.findAll();
 
-        assertThrows(UnsupportedOperationException.class, () -> tasks.add(new Task("Learn Java")));
+        assertThrows(UnsupportedOperationException.class, tasks::removeFirst);
     }
 
     @Test
@@ -74,5 +76,39 @@ public class TaskListTest {
         boolean deleted = taskList.deleteById(1);
 
         assertFalse(deleted);
+    }
+
+    @Test
+    public void findByIdReturnsTaskWithGivenIdAmongMany() {
+        TaskList taskList = TaskList.empty();
+        String secondDescription = "Task 2";
+        taskList.add("Task 1");
+        int secondId = taskList.add(secondDescription);
+
+        Optional<Task> found = taskList.findById(secondId);
+
+        assertEquals(secondDescription, found.orElseThrow().getDescription());
+    }
+
+    @Test
+    public void findByIdReturnsEmptyWhenTaskDoesNotExist() {
+        TaskList taskList = TaskList.empty();
+        int existingId = taskList.add("Task 1");
+        int missingId = existingId + 1;
+
+        Optional<Task> found = taskList.findById(missingId);
+
+        assertTrue(found.isEmpty());
+    }
+
+    @Test
+    public void eachTaskListNumbersTasksFromOne() {
+        TaskList firstList = TaskList.empty();
+        firstList.add("Task 1");
+        TaskList secondList = TaskList.empty();
+
+        secondList.add("Task 2");
+
+        assertEquals(1, secondList.findAll().getFirst().getId());
     }
 }
