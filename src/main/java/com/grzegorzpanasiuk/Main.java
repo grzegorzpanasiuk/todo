@@ -46,7 +46,7 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-        List<Task> tasks = new ArrayList<>();
+        TaskList taskList = TaskList.empty();
         Command command = null;
         String userText;
         int taskNumber;
@@ -72,7 +72,7 @@ public class Main {
                     displayMessage("Description (" + Task.MIN_DESCRIPTION_LENGTH
                             + "-" + Task.MAX_DESCRIPTION_LENGTH + " characters): ", false);
                     String description = scanner.nextLine().trim();
-                    addTaskAndReport(description, tasks);
+                    addTaskAndReport(description, taskList);
                     break;
                 case DELETE:
                     displayMessage("Delete task with number: ", false);
@@ -83,24 +83,23 @@ public class Main {
                         displayMessage("You didn't enter a number!", true);
                         break;
                     }
-                    found = false;
-                    Task taskToBeDeleted = findGivenTask(tasks, taskNumber);
-                    if (taskToBeDeleted != null) {
-                        found = true;
-                        tasks.remove(taskToBeDeleted);
+                    boolean deleted = taskList.deleteById(taskNumber);
+                    if (deleted) {
                         displayMessage("Task with number " + taskNumber + " was deleted.", true);
+                    } else {
+                        displayMessage("Task with number " + taskNumber + " does not exist!", true);
                     }
-                    if (!found) displayMessage("Task with number " + taskNumber + " does not exist!", true);
                     break;
                 case HELP:
                     displayMessage("Commands: " + Arrays.stream(Command.values()).toList(), true);
                     break;
                 case LIST:
-                    if (tasks.isEmpty()) {
+                    List<Task> allTasks = taskList.findAll();
+                    if (allTasks.isEmpty()) {
                         displayMessage("Task list is empty.", true);
                         break;
                     }
-                    printAllTasks(tasks);
+                    printAllTasks(allTasks);
                     break;
                 case MARK:
                     displayMessage("Mark given task as done, enter task number: ", false);
@@ -112,7 +111,7 @@ public class Main {
                         break;
                     }
                     found = false;
-                    Task taskToBeMarked = findGivenTask(tasks, taskNumber);
+                    Task taskToBeMarked = findGivenTask(taskList.findAll(), taskNumber);
                     if (taskToBeMarked != null) {
                         if (taskToBeMarked.isDone()) {
                             displayMessage("Task with number " + taskNumber + " was already marked as done!", true);
@@ -147,8 +146,8 @@ public class Main {
         return errors;
     }
 
-    private static void addTaskAndReport(String description, List<Task> tasks) {
-        List<String> errors = addTask(description, tasks);
+    private static void addTaskAndReport(String description, TaskList taskList) {
+        List<String> errors = addTask(description, taskList);
         if (!errors.isEmpty()) {
             for (String error : errors) {
                 displayMessage(error, true);
@@ -156,13 +155,13 @@ public class Main {
             return;
         }
         displayMessage("New task added.", true);
-        printAllTasks(tasks);
+        printAllTasks(taskList.findAll());
     }
 
-    static List<String> addTask(String description, List<Task> tasks) {
+    static List<String> addTask(String description, TaskList taskList) {
         List<String> errors = findDescriptionErrors(description);
         if (errors.isEmpty()) {
-            tasks.add(new Task(description));
+            taskList.add(description);
         }
         return errors;
     }
