@@ -42,10 +42,11 @@ public class TaskListTest {
     @Test
     public void tasksReturnedByFindAllCannotBeModified() {
         TaskList taskList = TaskList.empty();
+        taskList.add("Task 1");
 
         List<Task> tasks = taskList.findAll();
 
-        assertThrows(UnsupportedOperationException.class, () -> tasks.clear());
+        assertThrows(UnsupportedOperationException.class, tasks::removeFirst);
     }
 
     @Test
