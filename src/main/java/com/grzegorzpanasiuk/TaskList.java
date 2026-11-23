@@ -7,6 +7,13 @@ import java.util.List;
 public class TaskList {
     private final List<Task> tasks = new ArrayList<>();
 
+    private TaskList() {
+    }
+
+    public static TaskList empty() {
+        return new TaskList();
+    }
+
     public List<Task> findAll() {
         return Collections.unmodifiableList(tasks);
     }

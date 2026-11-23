@@ -46,7 +46,7 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-        TaskList taskList = new TaskList();
+        TaskList taskList = TaskList.empty();
         Command command = null;
         String userText;
         int taskNumber;

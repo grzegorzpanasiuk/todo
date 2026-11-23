@@ -10,7 +10,7 @@ public class TaskListTest {
 
     @Test
     public void newTaskListIsEmpty() {
-        TaskList taskList = new TaskList();
+        TaskList taskList = TaskList.empty();
 
         List<Task> tasks = taskList.findAll();
 
@@ -19,7 +19,7 @@ public class TaskListTest {
 
     @Test
     public void addedTaskIsReturnedByFindAll() {
-        TaskList taskList = new TaskList();
+        TaskList taskList = TaskList.empty();
         String description = "Learn Java";
 
         taskList.add(description);
@@ -31,7 +31,7 @@ public class TaskListTest {
 
     @Test
     public void addReturnsIdOfAddedTask() {
-        TaskList taskList = new TaskList();
+        TaskList taskList = TaskList.empty();
 
         int id = taskList.add("Learn TDD");
 
@@ -40,7 +40,7 @@ public class TaskListTest {
 
     @Test
     public void tasksReturnedByFindAllCannotBeModified() {
-        TaskList taskList = new TaskList();
+        TaskList taskList = TaskList.empty();
 
         List<Task> tasks = taskList.findAll();
 
@@ -49,7 +49,7 @@ public class TaskListTest {
 
     @Test
     public void deletedTaskIsNotReturnedByFindAll() {
-        TaskList taskList = new TaskList();
+        TaskList taskList = TaskList.empty();
         int id = taskList.add("Task 1");
 
         taskList.deleteById(id);
@@ -59,7 +59,7 @@ public class TaskListTest {
 
     @Test
     public void deletingExistingTaskReturnsTrue() {
-        TaskList taskList = new TaskList();
+        TaskList taskList = TaskList.empty();
         int id = taskList.add("Task 2");
 
         boolean deleted = taskList.deleteById(id);
@@ -69,7 +69,7 @@ public class TaskListTest {
 
     @Test
     public void deletingNonExistentTaskReturnsFalse() {
-        TaskList taskList = new TaskList();
+        TaskList taskList = TaskList.empty();
 
         boolean deleted = taskList.deleteById(1);
 
