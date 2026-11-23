@@ -47,7 +47,7 @@ public class MainTest {
 
     @Test
     public void validDescriptionIsAddedToTasks() {
-        TaskList taskList = new TaskList();
+        TaskList taskList = TaskList.empty();
         String description = "Learn Java";
 
         List<String> errors = Main.addTask(description, taskList);
@@ -59,7 +59,7 @@ public class MainTest {
 
     @Test
     public void emptyDescriptionIsNotAdded() {
-        TaskList taskList = new TaskList();
+        TaskList taskList = TaskList.empty();
 
         List<String> errors = Main.addTask("", taskList);
 

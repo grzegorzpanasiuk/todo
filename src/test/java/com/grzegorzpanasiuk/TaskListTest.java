@@ -11,7 +11,7 @@ public class TaskListTest {
 
     @Test
     public void newTaskListIsEmpty() {
-        TaskList taskList = new TaskList();
+        TaskList taskList = TaskList.empty();
 
         List<Task> tasks = taskList.findAll();
 
@@ -20,7 +20,7 @@ public class TaskListTest {
 
     @Test
     public void addedTaskIsReturnedByFindAll() {
-        TaskList taskList = new TaskList();
+        TaskList taskList = TaskList.empty();
         String description = "Learn Java";
 
         taskList.add(description);
@@ -31,8 +31,17 @@ public class TaskListTest {
     }
 
     @Test
+    public void addReturnsIdOfAddedTask() {
+        TaskList taskList = TaskList.empty();
+
+        int id = taskList.add("Learn TDD");
+
+        assertEquals(taskList.findAll().getFirst().getId(), id);
+    }
+
+    @Test
     public void tasksReturnedByFindAllCannotBeModified() {
-        TaskList taskList = new TaskList();
+        TaskList taskList = TaskList.empty();
 
         List<Task> tasks = taskList.findAll();
 
@@ -41,9 +50,8 @@ public class TaskListTest {
 
     @Test
     public void deletedTaskIsNotReturnedByFindAll() {
-        TaskList taskList = new TaskList();
-        taskList.add("Task 1");
-        int id = taskList.findAll().getFirst().getId();
+        TaskList taskList = TaskList.empty();
+        int id = taskList.add("Task 1");
 
         taskList.deleteById(id);
 
@@ -52,9 +60,8 @@ public class TaskListTest {
 
     @Test
     public void deletingExistingTaskReturnsTrue() {
-        TaskList taskList = new TaskList();
-        taskList.add("Task 2");
-        int id = taskList.findAll().getFirst().getId();
+        TaskList taskList = TaskList.empty();
+        int id = taskList.add("Task 2");
 
         boolean deleted = taskList.deleteById(id);
 
@@ -63,7 +70,7 @@ public class TaskListTest {
 
     @Test
     public void deletingNonExistentTaskReturnsFalse() {
-        TaskList taskList = new TaskList();
+        TaskList taskList = TaskList.empty();
 
         boolean deleted = taskList.deleteById(1);
 
@@ -72,11 +79,10 @@ public class TaskListTest {
 
     @Test
     public void findByIdReturnsTaskWithGivenIdAmongMany() {
-        TaskList taskList = new TaskList();
+        TaskList taskList = TaskList.empty();
         String secondDescription = "Task 2";
         taskList.add("Task 1");
-        taskList.add(secondDescription);
-        int secondId = taskList.findAll().get(1).getId();
+        int secondId = taskList.add(secondDescription);
 
         Optional<Task> found = taskList.findById(secondId);
 
@@ -85,9 +91,9 @@ public class TaskListTest {
 
     @Test
     public void findByIdReturnsEmptyWhenTaskDoesNotExist() {
-        TaskList taskList = new TaskList();
-        taskList.add("Task 1");
-        int missingId = taskList.findAll().getFirst().getId() + 1;
+        TaskList taskList = TaskList.empty();
+        int existingId = taskList.add("Task 1");
+        int missingId = existingId + 1;
 
         Optional<Task> found = taskList.findById(missingId);
 
@@ -96,9 +102,9 @@ public class TaskListTest {
 
     @Test
     public void eachTaskListNumbersTasksFromOne() {
-        TaskList firstList = new TaskList();
+        TaskList firstList = TaskList.empty();
         firstList.add("Task 1");
-        TaskList secondList = new TaskList();
+        TaskList secondList = TaskList.empty();
 
         secondList.add("Task 2");
 

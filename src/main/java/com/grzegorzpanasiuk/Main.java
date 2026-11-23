@@ -17,7 +17,7 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-        TaskList taskList = new TaskList();
+        TaskList taskList = TaskList.empty();
         Command command = null;
         String userText;
         int taskNumber;
@@ -59,11 +59,12 @@ public class Main {
                     displayMessage("Commands: " + Arrays.stream(Command.values()).toList(), true);
                     break;
                 case LIST:
-                    if (taskList.findAll().isEmpty()) {
+                    List<Task> allTasks = taskList.findAll();
+                    if (allTasks.isEmpty()) {
                         displayMessage("Task list is empty.", true);
                         break;
                     }
-                    printAllTasks(taskList.findAll());
+                    printAllTasks(allTasks);
                     break;
                 case MARK:
                     displayMessage("Mark given task as done, enter task number: ", false);
