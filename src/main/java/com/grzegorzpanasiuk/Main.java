@@ -23,7 +23,7 @@ public class Main {
 
         do {
             System.out.println("Enter the command (type HELP for a list of allowed commands)");
-            userText = readTrimmedLineOrExit(scanner).toUpperCase();
+            userText = readTrimmedLine(scanner).orElse(Command.EXIT.name()).toUpperCase();
             try {
                 command = Command.valueOf(userText);
             } catch (IllegalArgumentException e) {
@@ -35,15 +35,25 @@ public class Main {
                 case ADD:
                     displayMessage("Description (" + Task.MIN_DESCRIPTION_LENGTH
                             + "-" + Task.MAX_DESCRIPTION_LENGTH + " characters): ", false);
-                    String description = readTrimmedLineOrExit(scanner);
-                    addTaskAndReport(description, taskList);
+                    Optional<String> description = readTrimmedLine(scanner);
+                    if (description.isEmpty()) {
+                        System.out.println();
+                        command = Command.EXIT;
+                        break;
+                    }
+                    addTaskAndReport(description.orElseThrow(), taskList);
                     break;
                 case DELETE:
                     displayMessage("Delete task with number: ", false);
-                    String taskToDelete = readTrimmedLineOrExit(scanner);
+                    Optional<String> taskToDelete = readTrimmedLine(scanner);
+                    if (taskToDelete.isEmpty()) {
+                        System.out.println();
+                        command = Command.EXIT;
+                        break;
+                    }
                     int taskNumberToBeDeleted;
                     try {
-                        taskNumberToBeDeleted = Integer.parseInt(taskToDelete);
+                        taskNumberToBeDeleted = Integer.parseInt(taskToDelete.orElseThrow());
                     } catch (NumberFormatException e) {
                         displayMessage("You didn't enter a number!", true);
                         break;
@@ -68,10 +78,15 @@ public class Main {
                     break;
                 case MARK:
                     displayMessage("Mark given task as done, enter task number: ", false);
-                    String taskToMarkAsDone = readTrimmedLineOrExit(scanner);
+                    Optional<String> taskToMarkAsDone = readTrimmedLine(scanner);
+                    if (taskToMarkAsDone.isEmpty()) {
+                        System.out.println();
+                        command = Command.EXIT;
+                        break;
+                    }
                     int taskNumberToBeMarked;
                     try {
-                        taskNumberToBeMarked = Integer.parseInt(taskToMarkAsDone);
+                        taskNumberToBeMarked = Integer.parseInt(taskToMarkAsDone.orElseThrow());
                     } catch (NumberFormatException e) {
                         displayMessage("You didn't enter a number!", true);
                         break;
@@ -93,15 +108,6 @@ public class Main {
             }
         } while (command != Command.EXIT);
         scanner.close();
-    }
-
-    private static String readTrimmedLineOrExit(Scanner scanner) {
-        Optional<String> line = readTrimmedLine(scanner);
-        if (line.isEmpty()) {
-            displayMessage("Goodbye!", true);
-            System.exit(0);
-        }
-        return line.orElseThrow();
     }
 
     static Optional<String> readTrimmedLine(Scanner scanner) {
