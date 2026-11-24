@@ -20,9 +20,28 @@ public class TaskTest {
     public void taskMarkedAsDoneIsDone() {
         Task task = new Task(1, "This is another description");
 
-        task.setDone(true);
+        task.markAsDone();
 
         assertTrue(task.isDone());
+    }
+
+    @Test
+    public void markingNotDoneTaskAsDoneReturnsTrue() {
+        Task task = new Task(1, "This is another description");
+
+        boolean marked = task.markAsDone();
+
+        assertTrue(marked);
+    }
+
+    @Test
+    public void markingAlreadyDoneTaskAsDoneReturnsFalse() {
+        Task task = new Task(1, "This is description");
+        task.markAsDone();
+
+        boolean marked = task.markAsDone();
+
+        assertFalse(marked);
     }
 
     @Test

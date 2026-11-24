@@ -3,6 +3,8 @@ package com.grzegorzpanasiuk;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -63,5 +65,32 @@ public class MainTest {
 
         assertTrue(taskList.findAll().isEmpty());
         assertTrue(errors.contains("Description cannot be empty!"));
+    }
+
+    @Test
+    public void readTrimmedLineRemovesSurroundingWhitespace() {
+        Scanner scanner = new Scanner("  Learn Java   \n");
+
+        Optional<String> line = Main.readTrimmedLine(scanner);
+
+        assertEquals(Optional.of("Learn Java"), line);
+    }
+
+    @Test
+    public void readTrimmedLineReturnsEmptyTextForEmptyLine() {
+        Scanner scanner = new Scanner("\n");
+
+        Optional<String> line = Main.readTrimmedLine(scanner);
+
+        assertEquals(Optional.of(""), line);
+    }
+
+    @Test
+    public void readTrimmedLineReturnsEmptyWhenInputHasEnded() {
+        Scanner scanner = new Scanner("");
+
+        Optional<String> line = Main.readTrimmedLine(scanner);
+
+        assertTrue(line.isEmpty());
     }
 }

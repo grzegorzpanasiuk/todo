@@ -3,8 +3,9 @@ package com.grzegorzpanasiuk;
 public class Task {
     static final int MIN_DESCRIPTION_LENGTH = 3;
     static final int MAX_DESCRIPTION_LENGTH = 45;
+
     private final int id;
-    private String description;
+    private final String description;
     private boolean done;
 
     public Task(int id, String description) {
@@ -23,16 +24,16 @@ public class Task {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public boolean isDone() {
         return done;
     }
 
-    public void setDone(boolean done) {
-        this.done = done;
+    public boolean markAsDone() {
+        if (isDone()) {
+            return false;
+        }
+        this.done = true;
+        return true;
     }
 
     public static boolean isValidDescription(String description) {
