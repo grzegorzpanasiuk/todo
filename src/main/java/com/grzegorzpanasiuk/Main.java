@@ -1,7 +1,6 @@
 package com.grzegorzpanasiuk;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -18,19 +17,11 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         TaskList taskList = TaskList.empty();
-        Command command = null;
-        String userText;
+        Command command;
 
         do {
             System.out.println("Enter the command (type HELP for a list of allowed commands)");
-            userText = readTrimmedLine(scanner).orElse(Command.EXIT.name()).toUpperCase();
-            try {
-                command = Command.valueOf(userText);
-            } catch (IllegalArgumentException e) {
-                displayMessage("Invalid command, allowed commands are: "
-                        + Arrays.stream(Command.values()).toList(), true);
-                continue;
-            }
+            command = readTrimmedLine(scanner).map(Command::fromText).orElse(Command.EXIT);
             switch (command) {
                 case ADD:
                     displayMessage("Description (" + Task.MIN_DESCRIPTION_LENGTH
@@ -66,7 +57,7 @@ public class Main {
                     }
                     break;
                 case HELP:
-                    displayMessage("Commands: " + Arrays.stream(Command.values()).toList(), true);
+                    displayMessage("Commands: " + Command.allowedCommands(), true);
                     break;
                 case LIST:
                     List<Task> allTasks = taskList.findAll();
@@ -104,6 +95,9 @@ public class Main {
                             },
                             () -> displayMessage("Task with number " + taskNumberToBeMarked + " does not exist!", true)
                     );
+                    break;
+                case UNKNOWN:
+                    displayMessage("Invalid command, allowed commands are: " + Command.allowedCommands(), true);
                     break;
             }
         } while (command != Command.EXIT);
