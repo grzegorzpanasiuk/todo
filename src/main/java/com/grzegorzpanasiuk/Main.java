@@ -28,7 +28,6 @@ public class Main {
                             + "-" + Task.MAX_DESCRIPTION_LENGTH + " characters): ", false);
                     Optional<String> description = readTrimmedLine(scanner);
                     if (description.isEmpty()) {
-                        System.out.println();
                         command = Command.EXIT;
                         break;
                     }
@@ -38,7 +37,6 @@ public class Main {
                     displayMessage("Delete task with number: ", false);
                     Optional<String> taskToDelete = readTrimmedLine(scanner);
                     if (taskToDelete.isEmpty()) {
-                        System.out.println();
                         command = Command.EXIT;
                         break;
                     }
@@ -71,7 +69,6 @@ public class Main {
                     displayMessage("Mark given task as done, enter task number: ", false);
                     Optional<String> taskToMarkAsDone = readTrimmedLine(scanner);
                     if (taskToMarkAsDone.isEmpty()) {
-                        System.out.println();
                         command = Command.EXIT;
                         break;
                     }
@@ -102,6 +99,7 @@ public class Main {
             }
         } while (command != Command.EXIT);
         scanner.close();
+        displayMessage("Goodbye!", true);
     }
 
     static Optional<String> readTrimmedLine(Scanner scanner) {
