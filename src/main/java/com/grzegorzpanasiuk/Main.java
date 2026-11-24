@@ -102,6 +102,13 @@ public class Main {
         displayMessage("Goodbye!", true);
     }
 
+    /**
+     * Reads the next line and removes surrounding whitespace.
+     *
+     * @return the trimmed line (an empty string for an empty line),
+     *         or an empty {@code Optional} when the input has ended,
+     *         e.g. the user pressed Ctrl+D or piped input ran out
+     */
     static Optional<String> readTrimmedLine(Scanner scanner) {
         if (!scanner.hasNextLine()) {
             return Optional.empty();
